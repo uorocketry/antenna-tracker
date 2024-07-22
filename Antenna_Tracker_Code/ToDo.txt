@@ -1,0 +1,28 @@
+ToDos for Antenna Tracker Code
+
+Done 
+
+- Make Rocket Class:
+    - All Setters and getter
+        - Longitude
+        - Latitude
+        - Altitude
+        - IsConnected
+        - State (Idle, Scanning, Connected, Predicting)
+    - Code to update Antennas Position
+    - Code to kill the Tracker
+
+- Make Anternna Class : 
+    - All Setters and getter
+        - Longitude
+        - Latitude
+        - Altitude
+
+In Progess
+
+- Main (Execution) Class    
+    - Set Antennas Coords
+    - State Cycle
+    - Scanning Algo
+    - Predicting Algo
+    - SQL Queries to get Coords
