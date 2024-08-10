@@ -27,7 +27,7 @@ def CollectingCoords_thread():
             reader = csv.DictReader(csvfile)
             for row in reader:
                 CoordStack.push([float(row['alt']), float(row['latitude']), float(row['longitude'])])
-                time.sleep(0.1)  # Sleep for half a second
+                time.sleep(0.01)  # Sleep for half a second
     
 
 def AntennaController_thread ():
@@ -91,7 +91,7 @@ def AntennaController_thread ():
             print ("tracker move")
         
         rocket.move_tracker()
-        time.sleep(0.1)  # Sleep for half a second
+        time.sleep(0.01)  # Sleep for half a second
         
         
         if 1 != 1 :# PlaceHolder # Enter Manual input as condition

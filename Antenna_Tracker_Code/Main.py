@@ -10,6 +10,8 @@ import csv
 import threading
 import SharedStack
 
+# Phidget API info : https://www.phidgets.com/?view=api
+
 # Place Holder Values, need to figure out how they will be entered initially (rocket might not need intial value but TBD)
 
 antenna = Antenna(47.98714, -81.84864, 62.52301) #STEM

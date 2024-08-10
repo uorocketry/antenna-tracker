@@ -153,8 +153,8 @@ class Rocket:
     def update_tracker_position(self, pitchAngle = None, yawAngle = None):
         
         if (pitchAngle == None and yawAngle == None):
-            pitchSteps = self.calc_pitch*(27200/360)
-            yawSteps = self.calc_yaw*(27200/360)
+            pitchSteps = self.calc_pitch()*(27200/360)
+            yawSteps = self.calc_yaw()*(27200/360)
         
             # no gearbox and bet 360 deg is 3200 (360/1.8 * 16)
             # gearbox ratio 4.25 (estimate)
