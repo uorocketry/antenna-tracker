@@ -18,14 +18,15 @@ Done
         - Latitude
         - Altitude
 
-In Progess
-
 - Main (Execution) Class    
     - Set Antennas Coords
     - State Cycle
     - Scanning Algo
     - Predicting Algo
-    - SQL Queries to get Coords
+
+In Progess
+
+
 
     - stepper code monitor 
     - heath check - restarts in case of a crash
