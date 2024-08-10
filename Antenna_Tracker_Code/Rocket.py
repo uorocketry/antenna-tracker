@@ -2,14 +2,12 @@ from Phidget22.Phidget import *
 from Phidget22.Devices.Stepper import *
 import math
 from geographiclib.geodesic import Geodesic
-import Antenna
+from Antenna import Antenna
 import time
 
 class Rocket:
-    def __init__(latitude, longitude, altitude, self, is_connected=False, state="IDLE"):
-        if not isinstance(Antenna):
-            raise ValueError("antenna must be an instance of the Antenna class")
-        self._antenna = Antenna
+    def __init__(self, latitude, longitude, altitude, antenna, is_connected=False, state="IDLE"):
+        self._antenna = antenna
         self._is_connected = is_connected
         self._latitude = latitude
         self._longitude = longitude
@@ -23,15 +21,10 @@ class Rocket:
             self.stepperPitch.openWaitForAttachment(5000)
             self.stepperYaw.openWaitForAttachment(5000)
             
-            # exception handle
-            
             self.stepperPitch.setEngaged(True)
             self.stepperYaw.setEngaged(True)
         except :
             raise Exception("Steppers failed to engaged")
-        
-        # exception handle
-        #kill in case of exception
         
     # Getter for IsConnected
     @property
@@ -101,16 +94,23 @@ class Rocket:
     # Specific Setter for State to SCANNING
     def set_state_to_scanning(self):
         self._state = "SCANNING"
+        
+    # Uses the latitude and longitude of the rocket and antenna to the yaw angle of the antenna
 
     def calc_yaw(self):
         x = math.radians(self._antenna.latitude - self._latitude)
         y = math.radians(self._antenna.longitude - self._longitude)
-        yawRad = math.atan(y/x)
-        yawDeg = math.degrees(yawRad)
         
-        #catch x =0 
+        try :
+            yawRad = math.atan(y/x)
+            yawDeg = math.degrees(yawRad)
+        except : 
+            print ("calc_yaw : division by 0")
 
         return yawDeg
+    
+    # Uses the altitude of the rocket and antenna to the pitch angle of the antenna
+    # Geodesic is used to account for the curvature of the earth
     
     def calc_pitch(self):
             altdiff = self._altitude - self._antenna.altitude
@@ -118,42 +118,6 @@ class Rocket:
             pitchRad = math.atan(altdiff/dist['s12'])
             pitchDeg = math.degrees(pitchRad)
             return pitchDeg
-        
-    def update_tracker_position(self):
-
-        pitchSteps = self.calc_pitch*(27200/360)
-        
-        # no gearbox and bet 360 deg is 3200 (360/1.8 * 16)
-        # gearbox ratio 4.25 (estimate)
-        # bet ratio is 2
-        # devide or mutiply
-        # with gearbox 360 deg is 27200 (3200 * 4.25 *2)
-        # real step angle = 360/27200
-
-        yawSteps = self.calc_yaw*(27200/360)
-        return (pitchSteps, yawSteps)
-    
-    def move_tracker(self):
-        
-        (pitchSteps, yawSteps) = self.update_tracker_position()
-
-        try :
-            self.stepperPitch.setTargetPosition((pitchSteps))
-        except : 
-            print ("Pitch Stepper Set Target Position Failed")
-
-        try: 
-            self.stepperYaw.setTargetPosition(yawSteps)
-        except : 
-            print ("Yaw Stepper Set Target Position Failed")
-
-        # exception
-
-        # print("Pitch Position: " + str(self.stepperPitch.getPosition()))
-
-        # print("Yaw Position: " + str(yawDeg))
-            
-        # print("Yaw Position: " + str(self.stepperYaw.getPosition()) )
 
     
     def kill_tracker(self):
@@ -184,17 +148,36 @@ class Rocket:
 
         print("Steepers Killed")
         
+    # Translates the angle to the antenna to steps needed by each motor to attain the wanted position
         
-    def update_tracker_position(self, pitchAngle, yawAngle):
+    def update_tracker_position(self, pitchAngle = None, yawAngle = None):
+        
+        if (pitchAngle == None and yawAngle == None):
+            pitchSteps = self.calc_pitch*(27200/360)
+            yawSteps = self.calc_yaw*(27200/360)
+        
+            # no gearbox and bet 360 deg is 3200 (360/1.8 * 16)
+            # gearbox ratio 4.25 (estimate)
+            # bet ratio is 2
+            # devide or mutiply
+            # with gearbox 360 deg is 27200 (3200 * 4.25 *2)
+            # real step angle = 360/27200
+        else: 
 
-        pitchSteps = pitchAngle*(27200/360)
+            pitchSteps = pitchAngle*(27200/360)
 
-        yawSteps = yawAngle*(27200/360)
+            yawSteps = yawAngle*(27200/360)
         return (pitchSteps, yawSteps)
     
-    def move_tracker(self, pitchAngle, yawAngle):
+    # Calls the update tracker position method and makes the motors move the wanted amount of steps
+    
+    def move_tracker(self, pitchAngle = None, yawAngle = None):
         
-        (pitchSteps, yawSteps) = self.update_tracker_position(pitchAngle, yawAngle)
+        if (pitchAngle == None and yawAngle == None):
+            (pitchSteps, yawSteps) = self.update_tracker_position()
+        else : 
+                
+            (pitchSteps, yawSteps) = self.update_tracker_position(pitchAngle, yawAngle)
 
         try :
             self.stepperPitch.setTargetPosition((pitchSteps))

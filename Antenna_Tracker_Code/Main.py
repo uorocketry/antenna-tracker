@@ -1,65 +1,51 @@
 import csv
-import Rocket
-import Antenna
+from Rocket import Rocket
+from Antenna import Antenna
 from Phidget22.Phidget import *
 from Phidget22.Devices.Stepper import *
 import math
 import time
 from geographiclib.geodesic import Geodesic
 import csv
+import threading
+import SharedStack
 
-currentalt = 0
-lastalt = 0
-    
-class Main:
-    
-    print ("Program Started")
+# Place Holder Values, need to figure out how they will be entered initially (rocket might not need intial value but TBD)
 
-    antenna = Antenna()
-    rocket = Rocket()
-    
-    pitchAngle = 0
-    yawAngle = 0
-    yawIncrement = 1
-    
-    accelerationcoefficients = [-0.704039127,57.91038515, 9.4385495, 6.30910149, -7.281367082, 2.869182813, -0.503382474, 0.032046176]
-    decelerationcoefficients = [592.9403369, -49.48217932, 2.426806241, -0.065001575, 0.001014778, -0.00000914314, 0.0000000435434, -0.0000000000841452]
-    
-    timesincetakeoff = 0 # tbd
-    
-    def get_rocket_coords ():
-        
-        lastalt = currentalt 
+antenna = Antenna(47.98714, -81.84864, 62.52301) #STEM
+rocket = Rocket(47.986884, -81.848456, 362.52301, antenna)
 
-        with open('gps1.csv', newline='') as csvfile:
-            
-            reader = csv.DictReader(csvfile)
-            
-            Rocket_Latitude = float(1['latitude'])
-            Rocket_Longitude = float(1['longitude'])
-            Rocket_Altitude = float(1['alt'])
-            
-            currentalt = Rocket_Altitude
-            
-        return (Rocket_Latitude, Rocket_Longitude, Rocket_Altitude)
+def CollectingCoords_thread ():
     
-    def is_accending ():
-        return True
+    # Add coolection code
+    # Populates the CoordStack
+    # Expected output format
+        # Array [latitude, longitude, altitude, timestamp]
+    
+    return
 
+def AntennaController_thread ():
+    
+    # In Idle the antenna is not moving, waiting for a manual input to start scanning
+    
     while rocket.state == "IDLE" : 
         if 1 == 1 :# PlaceHolder # Enter Manual input as condition
-            rocket.state("SCANNING")
+            rocket.state = ("SCANNING")
+            
+    # In Scanning the antenna is moving in a set pattern (still subject to change)
+    # IMPORTANT need to determin a way to know if the rocket is connected
+        # Possible solution, if data in, in the last X seconds then it is considered connected
             
     while rocket.state == "SCANNING" : 
 
         if rocket.is_connected: # file gets populated maybe time == now (within a sec) ?
-            rocket.state("TRACKING")
+            rocket.state = ("TRACKING")
             pitchAngle = 0
             yawAngle = 0
             yawIncrement = 1
             break
             
-        rocket.move_traker(pitchAngle, yawAngle)
+        rocket.move_tracker(pitchAngle, yawAngle)
             
         yawAngle = yawAngle + yawIncrement
         
@@ -75,50 +61,52 @@ class Main:
             pitchAngle = 0
             yawAngle = 0
             yawIncrement = 1
+    
+    # When tracking we peek at the top element of the CoodStack and set the rockets Coods accordinglly. Use the Rocket class from there
+    # In the case where the rocket is not connected we will use the predicted coordinated (computed from the ground station TBD) 
                     
     while rocket.state == "TRACKING":
         # if not connected predicting
-        if rocket.is_connected == False:
-            if is_accending == True :
-                predictedvel = (
-                    accelerationcoefficients[7] * (timesincetakeoff ** 7) +
-                    accelerationcoefficients[6] * (timesincetakeoff ** 6) +
-                    accelerationcoefficients[5] * (timesincetakeoff ** 5) +
-                    accelerationcoefficients[4] * (timesincetakeoff ** 4) +
-                    accelerationcoefficients[3] * (timesincetakeoff ** 3) +
-                    accelerationcoefficients[2] * (timesincetakeoff ** 2) +
-                    accelerationcoefficients[1] * (timesincetakeoff ** 1) +
-                    accelerationcoefficients[0]
-                )
-            else : 
-                predictedvel = (
-                    decelerationcoefficients[7] * (timesincetakeoff ** 7) +
-                    decelerationcoefficients[6] * (timesincetakeoff ** 6) +
-                    decelerationcoefficients[5] * (timesincetakeoff ** 5) +
-                    decelerationcoefficients[4] * (timesincetakeoff ** 4) +
-                    decelerationcoefficients[3] * (timesincetakeoff ** 3) +
-                    decelerationcoefficients[2] * (timesincetakeoff ** 2) +
-                    decelerationcoefficients[1] * (timesincetakeoff ** 1) +
-                    decelerationcoefficients[0]
-                )
+        if rocket.is_connected == True:
             
-            newaltitude = rocket.altitude + predictedvel * (timesincetakeoff - lastadjusttime)
-            rocket.altitude(newaltitude)
-        
+            print (CoordStack.peek(0))
+            
+            try : 
+                rocket.latitude = (CoordStack.peek(0)[1])
+                rocket.longitude = (CoordStack.peek(0)[2])
+                rocket.altitude = (CoordStack.peek(0)[0])
+            except :
+                print ("Coord Stack is null")
+                
         else : 
             
-            (Rocket_Latitude, Rocket_Longitude, Rocket_Altitude) = get_rocket_coords()
+            # use predicted coordinated
+            palcehoder = ''
             
-            rocket.latitude(Rocket_Latitude)
-            rocket.longitude(Rocket_Longitude)
-            rocket.altitude(Rocket_Altitude)
-        
-        lastadjusttime = timesincetakeoff
-        
         rocket.move_tracker()
         
-        if 1 == 1 :# PlaceHolder # Enter Manual input as condition
-            rocket.state("IDLE")
+        # Have an manual input to stop process
+        
+        if 1 != 1 :# PlaceHolder # Enter Manual input as condition
+            rocket.state = ("IDLE")
+            rocket.kill_tracker()
+
+
+if __name__ == "__main__":
+
+    CoordStack = SharedStack(500)
+
+    antenna = Antenna()
+    rocket = Rocket()
+
+    CoodrsThread = threading.Thread(target=CollectingCoords_thread)
+    AntennaThread = threading.Thread(target=AntennaController_thread)
+    
+    CoodrsThread.start()
+    AntennaThread.start()
+    
+    CoodrsThread.join()
+    AntennaThread.join()
         
    
     
