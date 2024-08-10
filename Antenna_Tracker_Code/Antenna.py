@@ -1,5 +1,5 @@
 class Antenna:
-    def __init__(self, latitude=0.0, longitude=0.0, altitude=0.0):
+    def __init__(self, latitude, longitude, altitude):
         self._latitude = latitude
         self._longitude = longitude
         self._altitude = altitude

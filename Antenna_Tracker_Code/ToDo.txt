@@ -26,3 +26,12 @@ In Progess
     - Scanning Algo
     - Predicting Algo
     - SQL Queries to get Coords
+
+    - stepper code monitor 
+    - heath check - restarts in case of a crash
+    - GPIO read ras - limit switch
+    - grpc health check
+    - exception handling 
+    - muti threading 
+    - UDP input 
+    - set to ports to ras 

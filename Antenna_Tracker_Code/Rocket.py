@@ -6,7 +6,7 @@ import Antenna
 import time
 
 class Rocket:
-    def __init__(self, is_connected=False, latitude=0.0, longitude=0.0, altitude=0.0, state="IDLE"):
+    def __init__(latitude, longitude, altitude, self, is_connected=False, state="IDLE"):
         if not isinstance(Antenna):
             raise ValueError("antenna must be an instance of the Antenna class")
         self._antenna = Antenna
@@ -16,15 +16,23 @@ class Rocket:
         self._altitude = altitude
         self._state = state
         
-        self.stepperPitch = Stepper() 
-        self.stepperYaw = Stepper() 
+        try : 
+            self.stepperPitch = Stepper() 
+            self.stepperYaw = Stepper() 
+            
+            self.stepperPitch.openWaitForAttachment(5000)
+            self.stepperYaw.openWaitForAttachment(5000)
+            
+            # exception handle
+            
+            self.stepperPitch.setEngaged(True)
+            self.stepperYaw.setEngaged(True)
+        except :
+            raise Exception("Steppers failed to engaged")
         
-        self.stepperPitch.openWaitForAttachment(5000)
-        self.stepperYaw.openWaitForAttachment(5000)
+        # exception handle
+        #kill in case of exception
         
-        self.stepperPitch.setEngaged(True)
-        self.stepperYaw.setEngaged(True)
-    
     # Getter for IsConnected
     @property
     def is_connected(self):
@@ -99,6 +107,8 @@ class Rocket:
         y = math.radians(self._antenna.longitude - self._longitude)
         yawRad = math.atan(y/x)
         yawDeg = math.degrees(yawRad)
+        
+        #catch x =0 
 
         return yawDeg
     
@@ -111,17 +121,33 @@ class Rocket:
         
     def update_tracker_position(self):
 
-        pitchSteps = self.calc_pitch*(13600/360)
+        pitchSteps = self.calc_pitch*(27200/360)
+        
+        # no gearbox and bet 360 deg is 3200 (360/1.8 * 16)
+        # gearbox ratio 4.25 (estimate)
+        # bet ratio is 2
+        # devide or mutiply
+        # with gearbox 360 deg is 27200 (3200 * 4.25 *2)
+        # real step angle = 360/27200
 
-        yawSteps = self.calc_yaw*(13600/360)
+        yawSteps = self.calc_yaw*(27200/360)
         return (pitchSteps, yawSteps)
     
     def move_tracker(self):
         
         (pitchSteps, yawSteps) = self.update_tracker_position()
 
-        self.stepperPitch.setTargetPosition((pitchSteps))
-        self.stepperYaw.setTargetPosition(yawSteps)
+        try :
+            self.stepperPitch.setTargetPosition((pitchSteps))
+        except : 
+            print ("Pitch Stepper Set Target Position Failed")
+
+        try: 
+            self.stepperYaw.setTargetPosition(yawSteps)
+        except : 
+            print ("Yaw Stepper Set Target Position Failed")
+
+        # exception
 
         # print("Pitch Position: " + str(self.stepperPitch.getPosition()))
 
@@ -131,31 +157,54 @@ class Rocket:
 
     
     def kill_tracker(self):
-        self.stepperPitch.setTargetPosition(0)
-        self.stepperYaw.setTargetPosition(0)
+         
+        try :
+            self.stepperPitch.setTargetPosition(0)
+        except : 
+            print ("Pitch Stepper Set Target Position Failed during kill")
+    
+        try: 
+            self.stepperYaw.setTargetPosition(0)
+        except : 
+            print ("Yaw Stepper Set Target Position Failed during kill")
+
         time.sleep(1)
 
         #print("Pitch Position: " + str(self.stepperPitch.getPosition()))
         #print("Yaw Position: " + str(self.stepperYaw.getPosition()) )
-        
-        self.stepperPitch.close()
-        self.stepperYaw.close()
+        try :
+            self.stepperPitch.close()
+        except :
+            print ("Pitch Stepper Close Failed")
+
+        try :
+            self.stepperYaw.close()
+        except :
+            print ("Yaw Stepper Close Failed")
+
         print("Steepers Killed")
         
         
     def update_tracker_position(self, pitchAngle, yawAngle):
 
-        pitchSteps = pitchAngle*(13600/360)
+        pitchSteps = pitchAngle*(27200/360)
 
-        yawSteps = yawAngle*(13600/360)
+        yawSteps = yawAngle*(27200/360)
         return (pitchSteps, yawSteps)
     
     def move_tracker(self, pitchAngle, yawAngle):
         
         (pitchSteps, yawSteps) = self.update_tracker_position(pitchAngle, yawAngle)
 
-        self.stepperPitch.setTargetPosition((pitchSteps))
-        self.stepperYaw.setTargetPosition(yawSteps)
+        try :
+            self.stepperPitch.setTargetPosition((pitchSteps))
+        except : 
+            print ("Pitch Stepper Set Target Position Failed")
+
+        try: 
+            self.stepperYaw.setTargetPosition(yawSteps)
+        except : 
+            print ("Yaw Stepper Set Target Position Failed")
 
         # print("Pitch Position: " + str(self.stepperPitch.getPosition()))
 
