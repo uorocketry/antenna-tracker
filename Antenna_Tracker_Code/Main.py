@@ -9,6 +9,7 @@ from geographiclib.geodesic import Geodesic
 import csv
 import threading
 import SharedStack
+import socket
 
 # Phidget API info : https://www.phidgets.com/?view=api
 
@@ -18,6 +19,7 @@ antenna = Antenna(47.98714, -81.84864, 62.52301) #STEM
 rocket = Rocket(47.986884, -81.848456, 362.52301, antenna)
 
 def CollectingCoords_thread ():
+    
     
     # Add coolection code
     # Populates the CoordStack

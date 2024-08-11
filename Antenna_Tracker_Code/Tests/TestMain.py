@@ -1,4 +1,5 @@
 import csv
+import socket
 from TestRocket import TestRocket
 from TestAntenna import TestAntenna
 from Phidget22.Phidget import *
@@ -9,6 +10,18 @@ from geographiclib.geodesic import Geodesic
 import csv
 import threading
 from TestSharedStack import TestSharedStack
+
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    s.connect(("172.20.10.2", 5757))
+    print("Connected")
+    
+    while True:
+        data = s.recv(1024)
+        if not data:
+            time.sleep(0.1)
+            continue
+        print("received: ", data.decode('utf-8'))
+        time.sleep(0.1)
 
 CoordStack = TestSharedStack(500)
 PredictionStack = TestSharedStack(100)
