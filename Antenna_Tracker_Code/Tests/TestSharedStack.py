@@ -22,5 +22,5 @@ class TestSharedStack:
         if 0 <= index < len(self.stack):
             return self.stack[index]
         else:
-            print(f"Index {index} is out of bounds")
+            # print(f"Index {index} is out of bounds")
             return None
