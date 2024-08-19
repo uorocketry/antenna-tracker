@@ -17,11 +17,9 @@ import threading
 import SharedStack
 import socket
 
-class TestAntenna:
-    def __init__(self, latitude, longitude, altitude):
-        self.latitude = latitude
-        self.longitude = longitude
-        self.altitude = altitude
+        antenna = Antenna(47.98714, -81.84864, 62.52301) #STEM
+        rocket = Rocket(47.986884, -81.848456, 362.52301, antenna)
+
 
          try : #Attempting to connect the pitch and yaw motors to their drivers
             self.stepperPitch = Stepper() 
@@ -75,5 +73,12 @@ class TestAntenna:
     # @altitude.setter
     # def altitude(self, value):
     #     self._altitude = value
+
+
+
+
+
+
+
 
 
