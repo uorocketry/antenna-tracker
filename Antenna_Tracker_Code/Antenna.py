@@ -1,9 +1,13 @@
+#This program initalizes the antenna class. Creating an object for ant data to relate to
+#The antenna class contains lat lon and alt 
+#
+#
+
 class Antenna:
     def __init__(self, latitude, longitude, altitude):
         self._latitude = latitude
         self._longitude = longitude
-        self._altitude = altitude
-        
+        self._altitude = altitude 
 
     # Getter for Latitude
     @property

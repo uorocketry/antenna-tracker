@@ -1,3 +1,14 @@
+#This program initializes the rocket class, will be used to store "current time" properties that will be updated
+#Also in charge of connecting the motors together and actuating them
+#Rocket is conerned with its own alt, lat, long, state, and connection to the antenna class
+#the state determines which mode will be used to update the actuation of the motors
+
+
+#               **THINGS TO ADD**
+#   homing operation at startup, use the limit switches
+
+
+
 from Phidget22.Phidget import *
 from Phidget22.Devices.Stepper import *
 import math
@@ -6,7 +17,7 @@ from Antenna import Antenna
 import time
 
 class Rocket:
-    def __init__(self, latitude, longitude, altitude, antenna, is_connected=False, state="IDLE"):
+    def __init__(self, latitude, longitude, altitude, antenna, is_connected = False, state = "IDLE"):
         self._antenna = antenna
         self._is_connected = is_connected
         self._latitude = latitude
@@ -14,11 +25,11 @@ class Rocket:
         self._altitude = altitude
         self._state = state
         
-        try : 
+        try : #Attempting to connect the pitch and yaw motors to their drivers
             self.stepperPitch = Stepper() 
-            self.stepperYaw = Stepper() 
+            self.stepperYaw = Stepper()                                             #INC AN ACCELERATION AND VELOCITY LIMIT. FOR SAFETY
             
-            self.stepperPitch.openWaitForAttachment(5000)
+            self.stepperPitch.openWaitForAttachment(5000) #mili sec
             self.stepperYaw.openWaitForAttachment(5000)
             
             self.stepperPitch.setEngaged(True)
@@ -95,11 +106,14 @@ class Rocket:
     def set_state_to_scanning(self):
         self._state = "SCANNING"
         
+    
+    #METHODS
+
     # Uses the latitude and longitude of the rocket and antenna to the yaw angle of the antenna
 
     def calc_yaw(self):
         x = math.radians(self._antenna.latitude - self._latitude)
-        y = math.radians(self._antenna.longitude - self._longitude)
+        y = math.radians(self._antenna.longitude - self._longitude) #MAY NOT BE ACCURATE, SINCE TLONG LINE ARE NOT PARALLEL 'LONG TERM'
         
         try :
             yawRad = math.atan(y/x)
@@ -111,11 +125,12 @@ class Rocket:
     
     # Uses the altitude of the rocket and antenna to the pitch angle of the antenna
     # Geodesic is used to account for the curvature of the earth
+    #The output of 'Geodesic.WGS84.Inverse' can be found at: https://geographiclib.sourceforge.io/html/python/interface.html#dict
     
     def calc_pitch(self):
             altdiff = self._altitude - self._antenna.altitude
             dist = Geodesic.WGS84.Inverse(self._antenna.latitude, self._antenna.longitude, self._latitude, self._longitude)
-            pitchRad = math.atan(altdiff/dist['s12'])
+            pitchRad = math.atan(altdiff/dist['s12']) #Meters
             pitchDeg = math.degrees(pitchRad)
             return pitchDeg
 
@@ -189,10 +204,10 @@ class Rocket:
         except : 
             print ("Yaw Stepper Set Target Position Failed")
 
-        # print("Pitch Position: " + str(self.stepperPitch.getPosition()))
+         print("Pitch Position: " + str(self.stepperPitch.getPosition()))
 
         # print("Yaw Position: " + str(yawDeg))
             
-        # print("Yaw Position: " + str(self.stepperYaw.getPosition()) )
+         print("Yaw Position: " + str(self.stepperYaw.getPosition()) )
 
     
