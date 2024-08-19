@@ -17,32 +17,33 @@ import threading
 import SharedStack
 import socket
 
-#antenna = Antenna(47.98714, -81.84864, 62.52301) #STEM
-rocket = Rocket(47.986884, -81.848456, 362.52301, antenna)
+    #antenna = Antenna() #STEM
+rocket = Rocket(47.986884, -81.848456, 362.52301) 
+antenna = Antenna(47.98714, -81.84864, 62.52301, rocket) #STEM
 
 
-    try : #Attempting to connect the pitch and yaw motors to their drivers
-        self.stepperPitch = Stepper() 
-        self.stepperYaw = Stepper()                                             #INC AN ACCELERATION AND VELOCITY LIMIT. FOR SAFETY
+try : #Attempting to connect the pitch and yaw motors to their drivers
+    stepperPitch = Stepper() 
+    stepperYaw = Stepper()                                             #INC AN ACCELERATION AND VELOCITY LIMIT. FOR SAFETY
             
-        self.stepperPitch.openWaitForAttachment(5000) #mili sec
-        self.stepperYaw.openWaitForAttachment(5000)
+    stepperPitch.openWaitForAttachment(5000) #mili sec
+    stepperYaw.openWaitForAttachment(5000)
             
-        self.stepperPitch.setEngaged(True)
-        self.stepperYaw.setEngaged(True)
-    except :
+    stepperPitch.setEngaged(True)
+    stepperYaw.setEngaged(True)
+except :
         raise Exception("Steppers failed to engaged")
 
 
 
   #rocket.move_tracker(pitchAngle, yawAngle)
-rocket.move_tracker(90, 90)
-rocket.move_tracker(-90,-90)
+antenna.move_tracker(90, 90)
+antenna.move_tracker(-90,-90)
     #rocket.move_tracker(180,180)
     #rocket.move_tracker(-180,-180)
         
 
-rocket.kill_tracker()
+antenna.kill_tracker()
 
     # # Getter for Latitude
     # @property

@@ -17,8 +17,8 @@ from Rocket import Rocket
 import time
 
 class Antenna:
-    def __init__(self, latitude, longitude, altitude, rocket, is_connected_to_rocket = False, state = "IDLE"):
-        self._rocket = rocket
+    def __init__(self, latitude, longitude, altitude, is_connected_to_rocket = False, state = "IDLE"):
+    
         self._is_connected_to_rocket = is_connected_to_rocket
         self._latitude = latitude
         self._longitude = longitude
