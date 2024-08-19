@@ -3,7 +3,7 @@
 #
 #
 
-class Antenna:
+class Rocket:
     def __init__(self, latitude, longitude, altitude):
         self._latitude = latitude
         self._longitude = longitude
