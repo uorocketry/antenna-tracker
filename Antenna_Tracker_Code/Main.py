@@ -40,6 +40,25 @@ def AntennaController_thread ():
     # IMPORTANT need to determin a way to know if the rocket is connected
         # Possible solution, if data in, in the last X seconds then it is considered connected
             
+
+def calc_yaw(rocket_latitude):
+        x = math.radians(self._rocket.latitude - self._latitude)
+        y = math.radians(self._rocket.longitude - self._longitude) #MAY NOT BE ACCURATE, SINCE TLONG LINE ARE NOT PARALLEL 'LONG TERM'
+        
+        try :
+            yawRad = math.atan(y/x)
+            yawDeg = math.degrees(yawRad)
+        except : 
+            print ("calc_yaw : division by 0")
+
+        return yawDeg
+
+
+
+
+
+
+
     while rocket.state == "SCANNING" : 
 
         if rocket.is_connected: # file gets populated maybe time == now (within a sec) ?

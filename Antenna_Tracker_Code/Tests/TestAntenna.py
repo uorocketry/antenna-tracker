@@ -17,7 +17,7 @@ import threading
 import SharedStack
 import socket
 
-antenna = Antenna(47.98714, -81.84864, 62.52301) #STEM
+#antenna = Antenna(47.98714, -81.84864, 62.52301) #STEM
 rocket = Rocket(47.986884, -81.848456, 362.52301, antenna)
 
 
@@ -42,7 +42,7 @@ rocket.move_tracker(-90,-90)
     #rocket.move_tracker(-180,-180)
         
 
-    rocket.kill_tracker()
+rocket.kill_tracker()
 
     # # Getter for Latitude
     # @property
