@@ -25,17 +25,17 @@ class Antenna:
         self._altitude = altitude
         self._state = state
         
-        # try : #Attempting to connect the pitch and yaw motors to their drivers
-        #     self.stepperPitch = Stepper() 
-        #     self.stepperYaw = Stepper()                                             #INC AN ACCELERATION AND VELOCITY LIMIT. FOR SAFETY
-            
-        #     self.stepperPitch.openWaitForAttachment(5000) #mili sec
-        #     self.stepperYaw.openWaitForAttachment(5000)
-            
-        #     self.stepperPitch.setEngaged(True)
-        #     self.stepperYaw.setEngaged(True)
-        # except :
-        #     raise Exception("Steppers failed to engaged")
+        try : #Attempting to connect the pitch and yaw motors to their drivers
+            self.stepperPitch = Stepper() 
+            self.stepperYaw = Stepper()                                             #INC AN ACCELERATION AND VELOCITY LIMIT. FOR SAFETY
+                
+            self.stepperPitch.openWaitForAttachment(5000) #mili sec
+            self.stepperYaw.openWaitForAttachment(5000)
+                
+            self.stepperPitch.setEngaged(True)
+            self.stepperYaw.setEngaged(True)
+        except :
+            raise Exception("Steppers failed to engaged")
         
     # Getter for IsConnected
     @property
