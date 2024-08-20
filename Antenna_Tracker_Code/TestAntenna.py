@@ -19,7 +19,7 @@ import socket
 
 #antenna = Antenna() #STEM
 rocket = Rocket(47.986884, -81.848456, 362.52301) 
-antenna = Antenna(47.98714, -81.84864, 62.52301, rocket) #STEM
+antenna = Antenna(47.98714, -81.84864, 62.52301, False, "IDLE") #STEM
 
 
 try : #Attempting to connect the pitch and yaw motors to their drivers
