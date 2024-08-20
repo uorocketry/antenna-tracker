@@ -37,7 +37,7 @@ antenna = Antenna(47.98714, -81.84864, 62.52301, False, "IDLE") #STEM
 
 
   #rocket.move_tracker(pitchAngle, yawAngle)
-antenna.move_tracker(90, 90)
+antenna.move_tracker(900, 900)
 #antenna.move_tracker(-90,-90)
     #rocket.move_tracker(180,180)
     #rocket.move_tracker(-180,-180)
