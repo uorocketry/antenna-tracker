@@ -42,7 +42,7 @@ antenna.move_tracker(900, 900)
     #rocket.move_tracker(180,180)
     #rocket.move_tracker(-180,-180)
         
-
+print("killing myself")
 antenna.kill_tracker()
 
     # # Getter for Latitude
