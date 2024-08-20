@@ -1,6 +1,7 @@
 import csv
 from Rocket import Rocket
 from Antenna import Antenna
+from PredictionAlg import PredictionAlg
 from Phidget22.Phidget import *
 from Phidget22.Devices.Stepper import *
 import math
@@ -19,9 +20,12 @@ import socket
 #     def __init__(self, latitude, longitude, altitude, is_connected_to_rocket = False, state = "IDLE"):
 # class Rocket:
 #     def __init__(self, latitude, longitude, altitude):
+# class PredictionAlg:
+#     def __init__(self, latituide, lognitude, altitude, time):
 
 rocket = Rocket(47.986884, -81.848456, 362.52301) 
 antenna = Antenna(47.98714, -81.84864, 62.52301, False, "IDLE") #STEM
+predict = PredictionAlg()
 
 
 def AntennaController_thread (): #State checker 
