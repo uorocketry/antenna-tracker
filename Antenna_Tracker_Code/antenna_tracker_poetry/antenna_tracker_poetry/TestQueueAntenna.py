@@ -44,8 +44,10 @@ antenna = Antenna(47.98714, -81.84864, 62.52301, False, "IDLE") #STEM
 
 if __name__ == "__main__":
 
-
+  print("1")
   antenna.stepperPitch.setTargetPosition(0)
+
+  stack = []
   #queueP = asyncio.Queue()
   #queueP.asyncio.maxsize = 3
   #queueY = asyncio.Queue()
@@ -55,34 +57,49 @@ if __name__ == "__main__":
   #await queueP.join()
   #queueP.put_nowait(90)
 
+  stack.append(90)
+  a = stack.pop()
+  antenna.move_tracker(a, 90)
+  while (antenna.stepperPitch.getIsMoving() == True):
+    sleep(0.5)
 
-  antenna.move_tracker(90, 90)
+  print("2")
+
+  stack.append(90)
+  a = stack.pop()
+  antenna.move_tracker(a,-90)
   while (antenna.stepperPitch.getIsMoving() == True):
     sleep(0.25)
 
+  print("3")
 
-  antenna.move_tracker(-90,-90)
+  stack.append(180)
+  a = stack.pop()
+  antenna.move_tracker(a,180)
   while (antenna.stepperPitch.getIsMoving() == True):
     sleep(0.25)
 
+  print("4")
 
-  antenna.move_tracker(180,180)
+  stack.append(-180)
+  a = stack.pop()
+  antenna.move_tracker(a,-180)
   while (antenna.stepperPitch.getIsMoving() == True):
     sleep(0.25)
 
+  print("5")
 
-  antenna.move_tracker(-180,-180)
-  while (antenna.stepperPitch.getIsMoving() == True):
-    sleep(0.25)
-
-
-  antenna.move_tracker(0,0)
+  stack.append(0)
+  a = stack.pop()
+  antenna.move_tracker(a,0)
   while (antenna.stepperPitch.getIsMoving() == True):
     sleep(0.25)
 
 
   #task.cancel()
   #await asyncio.gather(task, return_exceptions = True)
+
+  print("killing myself")
   
   antenna.kill_tracker()
 
