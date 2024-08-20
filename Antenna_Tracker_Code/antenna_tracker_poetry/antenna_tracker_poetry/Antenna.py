@@ -111,37 +111,75 @@ class Antenna:
 
     # Uses the latitude and longitude of the rocket and antenna to the yaw angle of the antenna
 
-    def calc_yaw(self):
-        x = math.radians(self._rocket.latitude - self._latitude)
-        y = math.radians(self._rocket.longitude - self._longitude) #MAY NOT BE ACCURATE, SINCE TLONG LINE ARE NOT PARALLEL 'LONG TERM'
+    # def calc_yaw(self):
+    #     x = math.radians(self._rocket.latitude - self._latitude)
+    #     y = math.radians(self._rocket.longitude - self._longitude) #MAY NOT BE ACCURATE, SINCE TLONG LINE ARE NOT PARALLEL 'LONG TERM'
         
-        try :
-            yawRad = math.atan(y/x)
-            yawDeg = math.degrees(yawRad)
-        except : 
-            print ("calc_yaw : division by 0")
+    #     try :
+    #         yawRad = math.atan(y/x)
+    #         yawDeg = math.degrees(yawRad)
+    #     except : 
+    #         print ("calc_yaw : division by 0")
 
-        return yawDeg
+    #     return yawDeg
     
     # Uses the altitude of the rocket and antenna to the pitch angle of the antenna
     # Geodesic is used to account for the curvature of the earth
     #The output of 'Geodesic.WGS84.Inverse' can be found at: https://geographiclib.sourceforge.io/html/python/interface.html#dict
     
-    def calc_pitch(self):
-            altdiff = self._rocket_altitude - self._antenna.altitude
-            dist = Geodesic.WGS84.Inverse(self._antenna.latitude, self._antenna.longitude, self._latitude, self._longitude)
-            pitchRad = math.atan(altdiff/dist['s12']) #Meters
-            pitchDeg = math.degrees(pitchRad)
-            return pitchDeg
+    # def calc_pitch(self):
+    #         altdiff = self._rocket_altitude - self._antenna.altitude
+    #         dist = Geodesic.WGS84.Inverse(self._antenna.latitude, self._antenna.longitude, self._latitude, self._longitude)
+    #         pitchRad = math.atan(altdiff/dist['s12']) #Meters
+    #         pitchDeg = math.degrees(pitchRad)
+    #         return pitchDeg
+
+
+    # Translates the angle to the antenna to steps needed by each motor to attain the wanted position
+    def update_tracker_position(self, pitchAngle = None, yawAngle = None):
+        
+            # no gearbox and bet 360 deg is 3200 (360/1.8 * 16)
+            # gearbox ratio 4.25 (estimate)
+            # bet ratio is 2
+            # devide or mutiply
+            # with gearbox 360 deg is 27200 (3200 * 4.25 *2)
+            # real step angle = 360/27200
+       
+        pitchSteps = pitchAngle*(27200/360)
+        yawSteps = yawAngle*(27200/360)
+
+        return (pitchSteps, yawSteps)    
+
+
+# Calls the update tracker position method and makes the motors move the wanted amount of steps
+    def move_tracker(self, pitchAngle = None, yawAngle = None):
+                
+        (pitchSteps, yawSteps) = self.update_tracker_position(pitchAngle, yawAngle)
+
+        try :
+            self.stepperPitch.setTargetPosition((pitchSteps))
+        except : 
+            print ("Pitch Stepper Set Target Position Failed")
+
+        # try: 
+        #     self.stepperYaw.setTargetPosition(yawSteps)
+        # except : 
+        #     print ("Yaw Stepper Set Target Position Failed")
+
+    #print("Pitch Position: " + str(self.stepperPitch.getPosition()))
+
+        # print("Yaw Position: " + str(yawDeg))
+            
+    #print("Yaw Position: " + str(self.stepperYaw.getPosition()) )
 
     
     def kill_tracker(self):
          
-        try :
-            self.stepperPitch.setTargetPosition(0)
-        except Exception as e: 
-            print ("Pitch Stepper Set Target Position Failed during kill")
-            raise e
+        # try :                                         #maybe remove this comment
+        #     self.stepperPitch.setTargetPosition(0)
+        # except Exception as e: 
+        #     print ("Pitch Stepper Set Target Position Failed during kill")
+        #     raise e
     
         # try: 
         #     self.stepperYaw.setTargetPosition(0)
@@ -167,45 +205,8 @@ class Antenna:
 
         print("Steepers Killed")
         
-    # Translates the angle to the antenna to steps needed by each motor to attain the wanted position
-        
-    def update_tracker_position(self, pitchAngle = None, yawAngle = None):
-        
-        if (pitchAngle == None and yawAngle == None):
-            pitchSteps = self.calc_pitch()*(27200/360)
-            yawSteps = self.calc_yaw()*(27200/360)
-        
-            # no gearbox and bet 360 deg is 3200 (360/1.8 * 16)
-            # gearbox ratio 4.25 (estimate)
-            # bet ratio is 2
-            # devide or mutiply
-            # with gearbox 360 deg is 27200 (3200 * 4.25 *2)
-            # real step angle = 360/27200
-        else: 
 
-            pitchSteps = pitchAngle*(27200/360)
+        
 
-            yawSteps = yawAngle*(27200/360)
-        return (pitchSteps, yawSteps)
     
-    # Calls the update tracker position method and makes the motors move the wanted amount of steps
     
-    def move_tracker(self, pitchAngle = None, yawAngle = None):
-                
-        (pitchSteps, yawSteps) = self.update_tracker_position(pitchAngle, yawAngle)
-
-        try :
-            self.stepperPitch.setTargetPosition((pitchSteps))
-        except : 
-            print ("Pitch Stepper Set Target Position Failed")
-
-        # try: 
-        #     self.stepperYaw.setTargetPosition(yawSteps)
-        # except : 
-        #     print ("Yaw Stepper Set Target Position Failed")
-
-    #print("Pitch Position: " + str(self.stepperPitch.getPosition()))
-
-        # print("Yaw Position: " + str(yawDeg))
-            
-    #print("Yaw Position: " + str(self.stepperYaw.getPosition()) )
