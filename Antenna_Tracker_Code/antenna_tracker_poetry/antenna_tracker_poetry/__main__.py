@@ -1,12 +1,13 @@
-import csv
 from Rocket import Rocket
 from Antenna import Antenna
 from PredictionAlg import PredictionAlg
+
 from Phidget22.Phidget import *
 from Phidget22.Devices.Stepper import *
+from geographiclib.geodesic import Geodesic
+
 import math
 import time
-from geographiclib.geodesic import Geodesic
 import csv
 import threading
 import SharedStack
@@ -126,8 +127,8 @@ if __name__ == "__main__":      #What is this?
     antenna = Antenna()
     rocket = Rocket()
 
-    CoodrsThread = threading.Thread(target=CollectingCoords_thread)
-    AntennaThread = threading.Thread(target=AntennaController_thread)
+    CoodrsThread = threading.Thread(target = CollectingCoords_thread)
+    AntennaThread = threading.Thread(target = AntennaController_thread)
     
     CoodrsThread.start()
     AntennaThread.start()

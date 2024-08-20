@@ -8,7 +8,7 @@ from Antenna import Antenna
 import array
 
 class PredictionAlg:
-    def __init__(self, latituide, lognitude, altitude, time):
+    def __init__(self):
         int
         
         # if len(velocity) != 500 or len(time) != 500:
@@ -49,11 +49,13 @@ class PredictionAlg:
         #x axis = time
         #y axis = lat, long, alt
     #CoeffArray[6] = Poly.fit(x[],y[],deg = 7)
-        coeffArray_lat[6] = Poly.fit(time_array,latitude_array,7)
+        coeffArray_lat = polynomial.fit(time_array,latitude_array,7)
 
-        coeffArray_lon[6] = Poly.fit(time_array,longitude_array,7)
+        coeffArray_lon = polynomial.fit(time_array,longitude_array,7)
 
-        coeffArray_alt[6] = Poly.fit(time_array,altitude_array,7)
+        coeffArray_alt = polynomial.fit(time_array,altitude_array,7)
+
+        return coeffArray_lat, coeffArray_lon, coeffArray_alt
 
 
     def create_fx():
@@ -61,6 +63,7 @@ class PredictionAlg:
             #Array not completly filled
         if indx < 500:
             delta_time = time_array[indx]-time_array[0]
+
             predicted_lat = coeffArray_lat[0] + coeffArray_lat[1]*delta_time + coeffArray_lat[2]*pow(delta_time,2) + coeffArray_lat[3]*pow(delta_time,3) + coeffArray_lat[4]*pow(delta_time,4) + coeffArray_lat[5]*pow(delta_time,5) + coeffArray_lat[6]*pow(delta_time,6)
 
             predicted_lon = coeffArray_lon[0] + coeffArray_lon[1]*delta_time + coeffArray_lon[2]*pow(delta_time,2) + coeffArray_lon[3]*pow(delta_time,3) + coeffArray_lon[4]*pow(delta_time,4) + coeffArray_lon[5]*pow(delta_time,5) + coeffArray_lon[6]*pow(delta_time,6)
@@ -70,6 +73,7 @@ class PredictionAlg:
             #Array is filled
         else:
             delta_time = time_array[500]-time_array[0]
+
             predicted_lat = coeffArray_lat[0] + coeffArray_lat[1]*delta_time + coeffArray_lat[2]*pow(delta_time,2) + coeffArray_lat[3]*pow(delta_time,3) + coeffArray_lat[4]*pow(delta_time,4) + coeffArray_lat[5]*pow(delta_time,5) + coeffArray_lat[6]*pow(delta_time,6)
 
             predicted_lon = coeffArray_lon[0] + coeffArray_lon[1]*delta_time + coeffArray_lon[2]*pow(delta_time,2) + coeffArray_lon[3]*pow(delta_time,3) + coeffArray_lon[4]*pow(delta_time,4) + coeffArray_lon[5]*pow(delta_time,5) + coeffArray_lon[6]*pow(delta_time,6)
@@ -201,6 +205,11 @@ if __name__ == "__main__":
     coeffArray_alt = np.empty(7, dtype = float)
 
     indx = 0
+
+    predict_lat = 0
+    predict_lon = 0
+    predict_alt = 0
+
     
 
 
