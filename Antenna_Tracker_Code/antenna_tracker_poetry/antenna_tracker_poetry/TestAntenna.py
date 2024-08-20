@@ -16,6 +16,7 @@ import csv
 import threading
 import SharedStack
 import socket
+from time import sleep
 
 #antenna = Antenna() #STEM
 rocket = Rocket(47.986884, -81.848456, 362.52301) 
@@ -41,8 +42,9 @@ antenna.move_tracker(900, 900)
 #antenna.move_tracker(-90,-90)
     #rocket.move_tracker(180,180)
     #rocket.move_tracker(-180,-180)
-        
+sleep(2)        
 print("killing myself")
+
 antenna.kill_tracker()
 
     # # Getter for Latitude
