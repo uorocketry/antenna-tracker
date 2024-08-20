@@ -143,11 +143,11 @@ class Antenna:
             print ("Pitch Stepper Set Target Position Failed during kill")
             raise e
     
-        try: 
-            self.stepperYaw.setTargetPosition(0)
-        except Exception as e: 
-            print ("Yaw Stepper Set Target Position Failed during kill")
-            raise e
+        # try: 
+        #     self.stepperYaw.setTargetPosition(0)
+        # except Exception as e: 
+        #     print ("Yaw Stepper Set Target Position Failed during kill")
+        #     raise e
 
         time.sleep(1)
 
@@ -159,11 +159,11 @@ class Antenna:
             print ("Pitch Stepper Close Failed")
             raise e
 
-        try :
-            self.stepperYaw.close()
-        except Exception as e:
-            print ("Yaw Stepper Close Failed")
-            raise e
+        # try :
+        #     self.stepperYaw.close()
+        # except Exception as e:
+        #     print ("Yaw Stepper Close Failed")
+        #     raise e
 
         print("Steepers Killed")
         
@@ -191,22 +191,18 @@ class Antenna:
     # Calls the update tracker position method and makes the motors move the wanted amount of steps
     
     def move_tracker(self, pitchAngle = None, yawAngle = None):
-        
-        if (pitchAngle == None and yawAngle == None):
-            (pitchSteps, yawSteps) = self.update_tracker_position()
-        else : 
                 
-            (pitchSteps, yawSteps) = self.update_tracker_position(pitchAngle, yawAngle)
+        (pitchSteps, yawSteps) = self.update_tracker_position(pitchAngle, yawAngle)
 
         try :
             self.stepperPitch.setTargetPosition((pitchSteps))
         except : 
             print ("Pitch Stepper Set Target Position Failed")
 
-        try: 
-            self.stepperYaw.setTargetPosition(yawSteps)
-        except : 
-            print ("Yaw Stepper Set Target Position Failed")
+        # try: 
+        #     self.stepperYaw.setTargetPosition(yawSteps)
+        # except : 
+        #     print ("Yaw Stepper Set Target Position Failed")
 
     #print("Pitch Position: " + str(self.stepperPitch.getPosition()))
 
