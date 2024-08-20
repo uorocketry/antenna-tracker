@@ -22,17 +22,17 @@ rocket = Rocket(47.986884, -81.848456, 362.52301)
 antenna = Antenna(47.98714, -81.84864, 62.52301, False, "IDLE") #STEM
 
 
-try : #Attempting to connect the pitch and yaw motors to their drivers
-    stepperPitch = Stepper() 
-#    stepperYaw = Stepper()                                             #INC AN ACCELERATION AND VELOCITY LIMIT. FOR SAFETY
+# try : #Attempting to connect the pitch and yaw motors to their drivers
+#     stepperPitch = Stepper() 
+# #    stepperYaw = Stepper()                                             #INC AN ACCELERATION AND VELOCITY LIMIT. FOR SAFETY
             
-    stepperPitch.openWaitForAttachment(5000) #mili sec
-#    stepperYaw.openWaitForAttachment(5000)
+#     stepperPitch.openWaitForAttachment(5000) #mili sec
+# #    stepperYaw.openWaitForAttachment(5000)
             
-    stepperPitch.setEngaged(True)
-#    stepperYaw.setEngaged(True)
-except :
-        raise Exception("Steppers failed to engaged")
+#     stepperPitch.setEngaged(True)
+# #    stepperYaw.setEngaged(True)
+# except :
+#         raise Exception("Steppers failed to engaged")
 
 
 
