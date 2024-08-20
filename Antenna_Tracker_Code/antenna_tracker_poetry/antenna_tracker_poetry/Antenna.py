@@ -139,13 +139,15 @@ class Antenna:
          
         try :
             self.stepperPitch.setTargetPosition(0)
-        except : 
+        except Exception as e: 
             print ("Pitch Stepper Set Target Position Failed during kill")
+            raise e
     
         try: 
             self.stepperYaw.setTargetPosition(0)
-        except : 
+        except Exception as e: 
             print ("Yaw Stepper Set Target Position Failed during kill")
+            raise e
 
         time.sleep(1)
 
@@ -153,13 +155,15 @@ class Antenna:
         #print("Yaw Position: " + str(self.stepperYaw.getPosition()) )
         try :
             self.stepperPitch.close()
-        except :
+        except Exception as e:
             print ("Pitch Stepper Close Failed")
+            raise e
 
         try :
             self.stepperYaw.close()
-        except :
+        except Exception as e:
             print ("Yaw Stepper Close Failed")
+            raise e
 
         print("Steepers Killed")
         

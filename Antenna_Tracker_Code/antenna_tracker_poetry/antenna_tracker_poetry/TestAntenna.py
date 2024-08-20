@@ -24,13 +24,13 @@ antenna = Antenna(47.98714, -81.84864, 62.52301, False, "IDLE") #STEM
 
 try : #Attempting to connect the pitch and yaw motors to their drivers
     stepperPitch = Stepper() 
-    stepperYaw = Stepper()                                             #INC AN ACCELERATION AND VELOCITY LIMIT. FOR SAFETY
+#    stepperYaw = Stepper()                                             #INC AN ACCELERATION AND VELOCITY LIMIT. FOR SAFETY
             
     stepperPitch.openWaitForAttachment(5000) #mili sec
-    stepperYaw.openWaitForAttachment(5000)
+#    stepperYaw.openWaitForAttachment(5000)
             
     stepperPitch.setEngaged(True)
-    stepperYaw.setEngaged(True)
+#    stepperYaw.setEngaged(True)
 except :
         raise Exception("Steppers failed to engaged")
 
@@ -38,7 +38,7 @@ except :
 
   #rocket.move_tracker(pitchAngle, yawAngle)
 antenna.move_tracker(90, 90)
-antenna.move_tracker(-90,-90)
+#antenna.move_tracker(-90,-90)
     #rocket.move_tracker(180,180)
     #rocket.move_tracker(-180,-180)
         
