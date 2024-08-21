@@ -46,6 +46,8 @@ if __name__ == "__main__":
 
 
   antenna.stepperPitch.setTargetPosition(0)
+  antenna.stepperYaw.setTargetPosition(0)
+
   #queueP = asyncio.Queue()
   #queueP.asyncio.maxsize = 3
   #queueY = asyncio.Queue()
@@ -56,24 +58,34 @@ if __name__ == "__main__":
   #queueP.put_nowait(90)
 
 
-  antenna.move_tracker(90, 90)
+  antenna.move_tracker(90, 0)
   while (antenna.stepperPitch.getIsMoving() == True):
     sleep(0.25)
 
 
-  antenna.move_tracker(-90,-90)
+  antenna.move_tracker(-90,0)
   while (antenna.stepperPitch.getIsMoving() == True):
     sleep(0.25)
 
 
-  antenna.move_tracker(180,180)
+
+  antenna.move_tracker(90, 0)
   while (antenna.stepperPitch.getIsMoving() == True):
     sleep(0.25)
 
 
-  antenna.move_tracker(-180,-180)
+  antenna.move_tracker(-90,0)
   while (antenna.stepperPitch.getIsMoving() == True):
     sleep(0.25)
+
+  # antenna.move_tracker(180,180)
+  # while (antenna.stepperPitch.getIsMoving() == True):
+  #   sleep(0.25)
+
+
+  # antenna.move_tracker(-180,-180)
+  # while (antenna.stepperPitch.getIsMoving() == True):
+  #   sleep(0.25)
 
 
   antenna.move_tracker(0,0)

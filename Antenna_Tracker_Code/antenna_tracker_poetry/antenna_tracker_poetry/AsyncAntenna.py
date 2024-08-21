@@ -17,7 +17,7 @@ from Rocket import Rocket
 import time
 
 class Antenna:
-    def __init__(self, latitude, longitude, altitude, is_connected_to_rocket = False, state = "IDLE"):
+    async def __init__(self, latitude, longitude, altitude, is_connected_to_rocket = False, state = "IDLE"):
     
         self._is_connected_to_rocket = is_connected_to_rocket
         self._latitude = latitude
@@ -27,83 +27,83 @@ class Antenna:
         
         try : #Attempting to connect the pitch and yaw motors to their drivers
             self.stepperPitch = Stepper() 
-            self.stepperYaw = Stepper()                                             #INC AN ACCELERATION AND VELOCITY LIMIT. FOR SAFETY
+            #self.stepperYaw = Stepper()                                             #INC AN ACCELERATION AND VELOCITY LIMIT. FOR SAFETY
                 
             self.stepperPitch.openWaitForAttachment(5000) #mili sec
-            self.stepperYaw.openWaitForAttachment(5000)
+            #self.stepperYaw.openWaitForAttachment(5000)
                 
             self.stepperPitch.setEngaged(True)
-            self.stepperYaw.setEngaged(True)
+            #self.stepperYaw.setEngaged(True)
         except :
             raise Exception("Steppers failed to engaged")
         
     # Getter for IsConnected
     @property
-    def is_connected_to_rocket(self):
+    async def is_connected_to_rocket(self):
         return self._is_connected_to_rocket
 
     # Setter for IsConnected
     @is_connected_to_rocket.setter
-    def is_connected_to_rocket(self, value):
+    async def is_connected_to_rocket(self, value):
         self._is_connected_to_rocket = value
 
     # Getter for Latitude
     @property
-    def latitude(self):
+    async def latitude(self):
         return self._latitude
 
     # Setter for Latitude
     @latitude.setter
-    def latitude(self, value):
+    async def latitude(self, value):
         self._latitude = value
 
     # Getter for Longitude
     @property
-    def longitude(self):
+    async def longitude(self):
         return self._longitude
     
     # Getter for Altitude
     @property
-    def altitude(self):
+    async def altitude(self):
         return self._altitude
 
     # Setter for Altitude
     @altitude.setter
-    def altitude(self, value):
+    async def altitude(self, value):
         self._altitude = value
 
     # Setter for Longitude
     @longitude.setter
-    def longitude(self, value):
+    async def longitude(self, value):
         self._longitude = value
 
     # Getter for State
     @property
-    def state(self):
+    async def state(self):
         return self._state
 
     # Setter for State
     @state.setter
-    def state(self, value):
+    async def state(self, value):
         if value in ["IDLE", "TRACKING", "PREDICTING", "SCANNING"]:
             self._state = value
         else:
             raise ValueError("Invalid state. State must be 'IDLE', 'TRACKING', 'PREDICTING', or 'SCANNING'.")
 
     # Specific Setter for State to IDLE
-    def set_state_to_idle(self):
+    async def set_state_to_idle(self):
         self._state = "IDLE"
 
     # Specific Setter for State to TRACKING
-    def set_state_to_tracking(self):
+    async def set_state_to_tracking(self):
         self._state = "TRACKING"
 
     # Specific Setter for State to PREDICTING
-    def set_state_to_predicting(self):
+    async def set_state_to_predicting(self):
         self._state = "PREDICTING"
 
     # Specific Setter for State to SCANNING
-    def set_state_to_scanning(self):
+    async def set_state_to_scanning(self):
         self._state = "SCANNING"
         
     
@@ -136,7 +136,7 @@ class Antenna:
 
 
     # Translates the angle to the antenna to steps needed by each motor to attain the wanted position
-    def update_tracker_position(self, pitchAngle = None, yawAngle = None):
+    async def update_tracker_position(self, pitchAngle = None, yawAngle = None):
         
             # no gearbox and bet 360 deg is 3200 (360/1.8 * 16)
             # gearbox ratio 4.25 (estimate)
@@ -152,7 +152,7 @@ class Antenna:
 
 
 # Calls the update tracker position method and makes the motors move the wanted amount of steps
-    def move_tracker(self, pitchAngle = None, yawAngle = None):
+    async def move_tracker(self, pitchAngle = None, yawAngle = None):
                 
         (pitchSteps, yawSteps) = self.update_tracker_position(pitchAngle, yawAngle)
 
@@ -161,19 +161,19 @@ class Antenna:
         except : 
             print ("Pitch Stepper Set Target Position Failed")
 
-        try: 
-            self.stepperYaw.setTargetPosition(yawSteps)
-        except : 
-             print ("Yaw Stepper Set Target Position Failed")
+        # try: 
+        #     self.stepperYaw.setTargetPosition(yawSteps)
+        # except : 
+        #     print ("Yaw Stepper Set Target Position Failed")
 
-        print("Pitch Position: " + str(self.stepperPitch.getPosition()))
+    #print("Pitch Position: " + str(self.stepperPitch.getPosition()))
 
-        print("Yaw Position: " + str(yawAngle))
+        # print("Yaw Position: " + str(yawDeg))
             
-        print("Yaw Position: " + str(self.stepperYaw.getPosition()) )
+    #print("Yaw Position: " + str(self.stepperYaw.getPosition()) )
 
     
-    def kill_tracker(self):
+    async def kill_tracker(self):
          
         # try :                                         #maybe remove this comment
         #     self.stepperPitch.setTargetPosition(0)
@@ -197,11 +197,11 @@ class Antenna:
             print ("Pitch Stepper Close Failed")
             raise e
 
-        try :
-             self.stepperYaw.close()
-        except Exception as e:
-             print ("Yaw Stepper Close Failed")
-             raise e
+        # try :
+        #     self.stepperYaw.close()
+        # except Exception as e:
+        #     print ("Yaw Stepper Close Failed")
+        #     raise e
 
         print("Steepers Killed")
         

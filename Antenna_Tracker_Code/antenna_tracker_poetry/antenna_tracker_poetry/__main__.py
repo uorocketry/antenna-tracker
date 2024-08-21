@@ -1,3 +1,5 @@
+#may use: await asyncio.sleep(0.25)
+
 from Rocket import Rocket
 from Antenna import Antenna
 from PredictionAlg import PredictionAlg
@@ -71,7 +73,7 @@ def find_rocket():
 
 
 def collectingCoords_thread():
-    
+    #add a queue, size of 5, after that clear stack and cont.
     # Add coolection code
     # Populates the CoordStack
     # Expected output format

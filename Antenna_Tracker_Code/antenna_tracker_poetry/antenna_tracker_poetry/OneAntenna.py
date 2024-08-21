@@ -27,13 +27,13 @@ class Antenna:
         
         try : #Attempting to connect the pitch and yaw motors to their drivers
             self.stepperPitch = Stepper() 
-            self.stepperYaw = Stepper()                                             #INC AN ACCELERATION AND VELOCITY LIMIT. FOR SAFETY
+            #self.stepperYaw = Stepper()                                             #INC AN ACCELERATION AND VELOCITY LIMIT. FOR SAFETY
                 
             self.stepperPitch.openWaitForAttachment(5000) #mili sec
-            self.stepperYaw.openWaitForAttachment(5000)
+            #self.stepperYaw.openWaitForAttachment(5000)
                 
             self.stepperPitch.setEngaged(True)
-            self.stepperYaw.setEngaged(True)
+            #self.stepperYaw.setEngaged(True)
         except :
             raise Exception("Steppers failed to engaged")
         
@@ -161,16 +161,16 @@ class Antenna:
         except : 
             print ("Pitch Stepper Set Target Position Failed")
 
-        try: 
-            self.stepperYaw.setTargetPosition(yawSteps)
-        except : 
-             print ("Yaw Stepper Set Target Position Failed")
+        # try: 
+        #     self.stepperYaw.setTargetPosition(yawSteps)
+        # except : 
+        #     print ("Yaw Stepper Set Target Position Failed")
 
-        print("Pitch Position: " + str(self.stepperPitch.getPosition()))
+    #print("Pitch Position: " + str(self.stepperPitch.getPosition()))
 
-        print("Yaw Position: " + str(yawAngle))
+        # print("Yaw Position: " + str(yawDeg))
             
-        print("Yaw Position: " + str(self.stepperYaw.getPosition()) )
+    #print("Yaw Position: " + str(self.stepperYaw.getPosition()) )
 
     
     def kill_tracker(self):
@@ -197,11 +197,11 @@ class Antenna:
             print ("Pitch Stepper Close Failed")
             raise e
 
-        try :
-             self.stepperYaw.close()
-        except Exception as e:
-             print ("Yaw Stepper Close Failed")
-             raise e
+        # try :
+        #     self.stepperYaw.close()
+        # except Exception as e:
+        #     print ("Yaw Stepper Close Failed")
+        #     raise e
 
         print("Steepers Killed")
         
