@@ -1,0 +1,6 @@
+# Ignore build, install, and log and .venv and .vscode directories in AntennaTrackerWS
+AntennaTrackerWS/build/
+AntennaTrackerWS/install/
+AntennaTrackerWS/log/
+AntennaTrackerWS/.venv/
+AntennaTrackerWS/.vscode/

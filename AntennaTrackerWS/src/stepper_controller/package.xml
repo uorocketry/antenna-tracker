@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>stepper_controller</name>
+  <version>0.0.1</version>
+  <description>Stepper Controller package for controlling and managing stepper motors using ROS 2 and Phidget22.</description>
+  <maintainer email="blinn@todo.todo">blinn</maintainer>
+  <license>TODO: License declaration</license>
+
+  <!-- Build tool dependencies -->
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_python</buildtool_depend>
+
+  <!-- inteface dependencies -->
+  <build_depend>rosidl_default_generators</build_depend>
+  <exec_depend>rosidl_default_runtime</exec_depend>
+  <member_of_group>rosidl_interface_packages</member_of_group>
+
+  <exec_depend>stepper_interfaces</exec_depend>
+
+  <!-- Other ROS 2 and Phidget dependencies -->
+  <depend>libphidget22</depend>
+
+  <!-- Python dependencies -->
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>time</exec_depend>
+  <exec_depend>python3</exec_depend>
+  <exec_depend>Phidget22</exec_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>
