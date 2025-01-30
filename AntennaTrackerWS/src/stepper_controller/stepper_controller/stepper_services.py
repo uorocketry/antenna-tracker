@@ -17,7 +17,7 @@ def setup_services(self):
     # currently baked in code (or default values), but could be a service one day - The List
     # setCurrentLimit, setMinVelocity, setMaxVelocity
 
-    # Add a get info on board service? Such as, board serial number
+    # Add a get info on board service? Such as, board serial number?
     return
 
 def add_position_offset_callback(self, request, response):
