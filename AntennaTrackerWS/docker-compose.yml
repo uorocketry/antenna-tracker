@@ -1,0 +1,24 @@
+services:
+  ros:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    #platform: linux/arm64 # For arm cpus
+    network_mode: host
+    privileged: true
+    volumes:
+      - /dev:/dev
+      - /sys:/sys 
+      - ./phidgets.rules:/etc/udev/rules.d/99-phidgets.rules
+    environment:
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-0} # ros id if we have multiple ros instances
+    devices:
+      - "/dev/bus/usb:/dev/bus/usb" # usb access
+      - "/dev/vchiq:/dev/vchiq"  # For Raspberry Pi camera
+      - "/dev/gpiomem:/dev/gpiomem" # For Raspberry Pi GPIO
+    restart: unless-stopped
+    command: >
+      bash -c "source /opt/ros/jazzy/setup.sh &&
+      source /workspace/install/setup.sh &&
+      export PYTHONPATH=$PYTHONPATH:/opt/venv/lib/python3.12/site-packages &&
+      exec ./launch.sh"
