@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y \
     udev \
     wget \
     gnupg \
+    ros-jazzy-mavros \
     && rm -rf /var/lib/apt/lists/*
 
 # Phidget22 Libraries for stepper motor (note: might need $(lsb_release -sc)-raspbian)
@@ -25,11 +26,18 @@ RUN wget -qO /usr/share/keyrings/phidgets.gpg \
     && apt-get update \
     && apt-get install libphidget22
 
+# Geographiclib install
+RUN wget https://raw.githubusercontent.com/mavlink/mavros/ros2/mavros/scripts/install_geographiclib_datasets.sh && \
+    chmod +x install_geographiclib_datasets.sh && \
+    ./install_geographiclib_datasets.sh
+
 # Copy udev rules file... I'm pretty sure I need to do this on host ngl
 COPY phidgets.rules /etc/udev/rules.d/99-phidgets.rules
 
 # Copy the entire project into the container
 COPY . /workspace/
+
+RUN rm -rf /workspace/build/ /workspace/install/ /workspace/log/
 
 # Create virtual environment (using system Python)
 RUN python3 -m venv --copies /opt/venv

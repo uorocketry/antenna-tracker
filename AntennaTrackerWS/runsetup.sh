@@ -9,9 +9,9 @@ echo "Activating ROS Workstation environment..."
 source install/setup.bash
 
 # Set PYTHONPATH for ROS 2 workspace
-VENV_PYTHONPATH="./.venv/lib/python3.12/site-packages"
+#VENV_PYTHONPATH="./.venv/lib/python3.12/site-packages"
 
 echo "Setting PYTHONPATH..."
-export PYTHONPATH=$PYTHONPATH:$VENV_PYTHONPATH
+export PYTHONPATH=$PYTHONPATH:"./.venv/lib/python3.12/site-packages"
 
 echo "Setup complete!"

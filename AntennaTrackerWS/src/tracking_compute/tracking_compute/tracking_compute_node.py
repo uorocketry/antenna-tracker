@@ -20,12 +20,20 @@ class trackingComputeNode(Node):
 
         # TO BE DONE --> Include actual coordinates of antenna and rocket using their respective nodes
         # SBG NODE for Antenna location
-        # RFD 900 Node for Rocket location
+
+        # MAVROS Node for Rocket location
+        # /mavros/global_position/global
+        # Provided as a sensor_msgs/NavSatFix.msg
+        # http://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/NavSatFix.html
+        # fix value
+        # float64 latitude
+        # float64 longitude
+        # float64 altitude
 
         # Initialize motors
         self.yawmotor = yawMotor(self)
         # self.pitchmotor = pitchMotor() # possible stepper board change means I'm waiting for this
-
+        
         # Future connection to ground station for coordinate prediction
 
         self.testing()
@@ -40,7 +48,6 @@ class trackingComputeNode(Node):
         self.yawmotor.position_offset() # set position to 0
         self.yawmotor.move(30.0) # move 30 degrees
         return
-
 
         
     # Called when the node is shutting down
