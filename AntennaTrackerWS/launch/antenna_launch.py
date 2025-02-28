@@ -17,13 +17,6 @@ def generate_launch_description():
             name='Compute',
         ),
 
-        # Not sure why, but Node doesn't seem to work...
-        # Here is a workaround
-
-        ExecuteProcess(
-            cmd=["ros2", "run", "mavros", "mavros_node", "--ros-args", "-p", "fcu_url:=tcp://127.0.0.1:5656"],
-            output="screen"
-        ),
         # Node(
         #     package='mavros',
         #     namespace='mavros',
@@ -37,4 +30,12 @@ def generate_launch_description():
         #         "target_component": 1
         #     }]
         # )
+        # Not sure why, but Node doesn't seem to work...
+        # Here is a workaround
+
+        ExecuteProcess(
+            cmd=["ros2", "run", "mavros", "mavros_node", "--ros-args", "-p", "fcu_url:=tcp://127.0.0.1:5656"],
+            output="screen"
+        ),
+       
     ])

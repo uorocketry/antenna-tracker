@@ -7,7 +7,7 @@ class Antenna():
         self.altitude = altitude
         self.state = state
 
-     # Getter and Setter for isConnectedToRocket
+    # Getter and Setter for isConnectedToRocket
     def getIsConnectedToRocket(self):
         return self.isConnectedToRocket
 

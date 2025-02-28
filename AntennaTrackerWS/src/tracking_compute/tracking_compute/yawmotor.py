@@ -11,7 +11,6 @@ class yawMotor:
         self.node = node
         self.node.get_logger().info("Yaw Motor initialized within TrackingComputeNode")
 
-
         # variables
         self.position = 0.0
 
