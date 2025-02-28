@@ -1,6 +1,7 @@
-# Ignore build, install, and log and .venv and .vscode directories in AntennaTrackerWS
+.vscode
 AntennaTrackerWS/build/
 AntennaTrackerWS/install/
 AntennaTrackerWS/log/
 AntennaTrackerWS/.venv/
 AntennaTrackerWS/.vscode/
+AntennaTracker/Launch/__pychache__/

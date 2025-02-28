@@ -34,7 +34,12 @@ class stepperControllerNode(Node):
         self.get_logger().info("Created actions")
 
         self.get_logger().info("Creating stepper controller, if it takes a while, check the connection")
-        self.stepper = stepperController(logger=self.get_logger(), serialNumber=1, stepAngle=1.8, acceleration=100, velocityLimit=1000, currentLimit=1)
+
+        ### THIS SECTION IS IMPORTANT AS WE NEED TO SET THE CORRECT VALUE BASED OFF ALL RATIOS ###
+        ### THIS SECTION IS IMPORTANT AS WE NEED TO SET THE CORRECT VALUE BASED OFF ALL RATIOS ###
+        ### THIS SECTION IS IMPORTANT AS WE NEED TO SET THE CORRECT VALUE BASED OFF ALL RATIOS ###
+        self.stepper = stepperController(logger=self.get_logger(), serialNumber=1, acceleration=100, velocityLimit=1000, currentLimit=1)
+        
         self.get_logger().info("Created stepper controller")
 
     # Called when the node is shutting down
@@ -44,27 +49,35 @@ class stepperControllerNode(Node):
         
 class stepperController(Stepper):
 
-    def __init__(self, logger, serialNumber, stepAngle, acceleration, velocityLimit, currentLimit):
+    def __init__(self, logger, serialNumber, acceleration, velocityLimit, currentLimit):
         super().__init__()
 
         # ROS logger
         self.logger = logger
 
+        stepAngle = 1.8
+        gearboxRatio = 4.25
+        beltRatio = 2
+
         # We lose some torque with microstepping, but it's locked in by phidget. @ 1/16
         self.stepAngle = stepAngle
-        self.stepsPerRevolution = (360 / self.stepAngle) * 16  # Microsteps per revolution
+        self.stepsPerRevolution = ((360 / self.stepAngle) * 16) * gearboxRatio * beltRatio  # Microsteps per revolution * (gearbox * belt)
         self.stepsPerDegree = 16 / self.stepAngle # Microsteps per Degree
 
         self.serialNumber = serialNumber
         #self.setDeviceSerialNumber() # This is one way to chose the correct board. (Phidget makes a hub as another option) 
         
-        while True:
+        flag = True
+
+        while flag:
             try:
                 self.openWaitForAttachment(5000)
+                flag = False
                 break
             except PhidgetException as e:
                 # failed but it will try again
                 time.sleep(1)
+                logger.info("Stepper failed to engage")
                 continue
 
         self.StepperControlMode(0x0) #CONTROL_MODE_STEP, should be set by default though
