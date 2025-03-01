@@ -1,3 +1,4 @@
 #Phidget22==1.20.20240911
 phidget22native==1.21.20241123
 setuptools==75.1.0
+gpiozero==2.0.1

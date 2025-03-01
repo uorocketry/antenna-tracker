@@ -16,6 +16,12 @@ def generate_launch_description():
             executable='tracking_compute',
             name='Compute',
         ),
+        Node(
+            package='switches',
+            namespace='switches',
+            executable='switches',
+            name='Switch',
+        ),
 
         # Node(
         #     package='mavros',
@@ -30,12 +36,12 @@ def generate_launch_description():
         #         "target_component": 1
         #     }]
         # )
+
         # Not sure why, but Node doesn't seem to work...
         # Here is a workaround
-
-        ExecuteProcess(
-            cmd=["ros2", "run", "mavros", "mavros_node", "--ros-args", "-p", "fcu_url:=tcp://127.0.0.1:5656"],
-            output="screen"
-        ),
+        # ExecuteProcess(
+        #     cmd=["ros2", "run", "mavros", "mavros_node", "--ros-args", "-p", "fcu_url:=tcp://127.0.0.1:5656"],
+        #     output="screen"
+        # ),
        
     ])
