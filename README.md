@@ -2,12 +2,13 @@
 Summed up, track the rocket and follow it with an antenna
 
 ## Important info
-Currently this repository is split into 2 sections. \
-Antenna_Tracker_Code (legacy repository) \
-& \
-AntennaTrackerWS (in work repository)
+Currently this repository is split into 2 sections.
 
-**Switch Information** \
+**LegacyAntennaTrackerWS** (legacy repository) \
+& \
+**AntennaTrackerWS** (in work repository)
+
+### Switch Information
 Pull Down Switches \
 Yaw Switch = Pin 15 = GPIO 22 \
 Pitch Switch = Pin 16 = GPIO 23 \
@@ -20,7 +21,7 @@ There are currently 2 ways to build this program. \
 
 If you just plan to only use this program. I recommend using docker compose.
 
-**Initial step** \
+### Initial step
 Clone repository
 ```bash
 git clone <repo-url>
@@ -68,4 +69,15 @@ source .venv/bin/activate
 pip3 install -r requirements.txt
 ```
 ## Notes
-When running colcon build, make sure to deactivate the virtual enviroment.
+When running colcon build, make sure to deactivate the virtual environment.
+
+## Rviz SITL testing (Very W.I.P)
+Currently this does not work, and is more a proof of concept.
+![Testing Rviz2 screenshot](./Images/testRviz2Screenshot.png)
+
+Follow these commands to try it out.
+```bash
+source install/setup.bash
+colcon build --symlink-install --packages-select tracker_testing
+ros2 launch tracker_testing test_launch.py
+```
