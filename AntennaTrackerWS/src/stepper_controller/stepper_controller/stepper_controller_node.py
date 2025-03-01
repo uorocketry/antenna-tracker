@@ -129,11 +129,14 @@ class stepperController(Stepper):
 def main(args=None):
     rclpy.init(args=args) 
     node = stepperControllerNode()
-    rclpy.spin(node)
-
-    # Should theoretically never make it here
-    node.stepper.close()
-    rclpy.shutdown()
+    
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        node.stepper.close()
+        rclpy.shutdown()
 
 if __name__ == '__main__':
     main()

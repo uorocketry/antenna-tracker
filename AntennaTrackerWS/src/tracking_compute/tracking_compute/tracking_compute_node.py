@@ -18,7 +18,7 @@ class trackingComputeNode(Node):
 
         # Initialize Antenna & Rocket object
         self.antenna = Antenna(47.98714, -81.84864, 62.52301, False, "IDLE") #STEM coordinates
-        self.rocket = Rocket(47.98714, -81.84864, 362.52301) #STEM coordinates, but higher altitude than antenna
+        self.rocket = Rocket(self, 47.98714, -81.84864, 362.52301) #STEM coordinates, but higher altitude than antenna
 
         # TO BE DONE --> Include actual coordinates of antenna using its respective node (SBG Node)
 
@@ -97,19 +97,17 @@ class trackingComputeNode(Node):
 
     #     return
 
-        
-    # Called when the node is shutting down
-    def on_shutdown(self):
-        self.stepper.close()
-
 
 def main(args=None):
     rclpy.init(args=args) 
     node = trackingComputeNode()
-    rclpy.spin(node)
 
-    # Should theoretically never make it here
-    rclpy.shutdown()
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        rclpy.shutdown()
 
 if __name__ == '__main__':
     main()

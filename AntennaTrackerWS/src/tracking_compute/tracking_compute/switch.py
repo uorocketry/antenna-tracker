@@ -15,12 +15,12 @@ class Switch:
 
     # Switch Callback
     def yaw_switch_callback(self, msg: Bool):
-        self.get_logger().info('Yaw switch triggered')
         self.yawSwitch = msg.data
+        self.node.get_logger().info(f'Yaw switch {self.yawSwitch}')
 
     def pitch_switch_callback(self, msg: Bool):
-        self.get_logger().info('Pitch switch triggered')
         self.pitchSwitch = msg.data
+        self.node.get_logger().info(f'Pitch switch {self.pitchSwitch}')
     
     # Getters
     def getYawSwitch(self):

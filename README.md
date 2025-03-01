@@ -2,22 +2,51 @@
 Summed up, track the rocket and follow it with an antenna
 
 ## Important info
-Currently this repository is split into 2 sections. \
-Antenna_Tracker_Code (legacy repository) \
+Currently this repository is split into 2 sections.
+
+**LegacyAntennaTrackerWS** (legacy repository) \
 & \
-AntennaTrackerWS (in work repository)
+**AntennaTrackerWS** (in work repository)
 
-## How to build yourself (on Ubuntu)
-Install These technologies \
-[Python3](https://www.python.org/) \
-[ROS 2 Jazzy Jalisco](https://docs.ros.org/en/jazzy/index.html)
+### Switch Information
+Pull Down Switches \
+Yaw Switch = Pin 15 = GPIO 22 \
+Pitch Switch = Pin 16 = GPIO 23 \
+Refer to [pineout.xyz](https://pinout.xyz/)
 
-**Run these commands** \
+## Build options
+There are currently 2 ways to build this program. \
+    1. Docker \
+    2. Ubuntu 24.04 LTS
+
+If you just plan to only use this program. I recommend using docker compose.
+
+### Initial step
 Clone repository
 ```bash
 git clone <repo-url>
 cd antenna-tracker/AntennaTrackerWS
 ```
+### Docker compose
+In docker-compose.yml set the environment variable to what is required for your use case.
+
+```
+environment:
+      - MOCK_GPIO=1
+      - OSCILLATE_SWITCHES=1
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-0}
+```
+Then run
+```bash
+docker compose up
+```
+### Ubuntu 24.04 LTS
+Install These technologies \
+[Python3](https://www.python.org/) \
+[ROS 2 Jazzy Jalisco](https://docs.ros.org/en/jazzy/index.html)
+
+**Run these commands**
+
 Install mavros
 ```bash
 sudo apt install ros-jazzy-mavros
@@ -26,10 +55,12 @@ wget https://raw.githubusercontent.com/mavlink/mavros/ros2/mavros/scripts/instal
 ```
 Install Phidget22 Libraries
 ```bash
-wget -qO /usr/share/keyrings/phidgets.gpg https://www.phidgets.com/gpgkey/pubring.gpg
-echo "deb [signed-by=/usr/share/keyrings/phidgets.gpg] http://www.phidgets.com/debian $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/phidgets.list
-sudo apt-get update
-sudo apt-get install libphidget22
+curl -fsSL https://www.phidgets.com/downloads/setup_linux | sudo -E bash -
+sudo apt install -y libphidget22
+```
+Install gpiozero
+```bash
+sudo apt install gpiozero
 ```
 Install Python deps
 ```bash
@@ -38,4 +69,15 @@ source .venv/bin/activate
 pip3 install -r requirements.txt
 ```
 ## Notes
-When running colcon build, make sure to deactivate the virtual enviroment.
+When running colcon build, make sure to deactivate the virtual environment.
+
+## Rviz SITL testing (Very W.I.P)
+Currently this does not work, and is more a proof of concept.
+![Testing Rviz2 screenshot](./Images/testRviz2Screenshot.png)
+
+Follow these commands to try it out.
+```bash
+source install/setup.bash
+colcon build --symlink-install --packages-select tracker_testing
+ros2 launch tracker_testing test_launch.py
+```

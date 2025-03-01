@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<robot name="tracker">
+
+  <material name="red">
+    <color rgba="1 0 0 1"/>
+  </material>
+
+  <material name="blue">
+      <color rgba="0 0 1 1"/>
+  </material>
+
+  <material name="green">
+    <color rgba="0 1 0 1"/>
+  </material>
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <cylinder length="1" radius="0.2"/>
+      </geometry>
+      <material name="red"/>
+      <origin rpy="0 0 0" xyz="0 0 0.5"/>
+    </visual>
+  </link>
+
+  <link name="arm_plate">
+    <visual>
+      <geometry>
+        <cylinder length="0.1" radius="0.3"/>
+      </geometry>
+      <material name="blue"/>
+      <origin rpy="0 0 0" xyz="0 0 1.05"/>
+    </visual>
+  </link>
+
+  <link name="arm">
+    <visual>
+      <geometry>
+        <box size="2 0.2 0.2"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.2 0 1.15"/>
+      <material name="green"/>
+    </visual>
+  </link>
+
+<!-- Base rotation joint -->
+<joint name="base_to_arm_plate" type="continuous">
+  <parent link="base_link"/>
+  <child link="arm_plate"/>
+  <axis xyz="0 0 1"/>
+  <limit effort="100" velocity="0.5"/>
+</joint>
+
+<!-- Vertical pointer joint -->
+<joint name="arm_plate_to_arm" type="revolute">
+  <parent link="arm_plate"/>
+  <child link="arm"/>
+  <axis xyz="0 1 0"/>
+  <limit lower="0" upper="1.5708" effort="100" velocity="0.5"/>
+</joint>
+
+</robot>

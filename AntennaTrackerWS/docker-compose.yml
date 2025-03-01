@@ -11,6 +11,8 @@ services:
       - /sys:/sys 
       - ./phidgets.rules:/etc/udev/rules.d/99-phidgets.rules
     environment:
+      - MOCK_GPIO=1 # set to 1 for true
+      - OSCILLATE_SWITCHES=1 # set to 1 for true
       - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-0} # ros id if we have multiple ros instances
     devices:
       - "/dev/bus/usb:/dev/bus/usb" # usb access
